@@ -2,7 +2,9 @@ package org.jsp.reservationapi.service;
 
 import java.util.Optional;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.jsp.reservationapi.dao.AdminDao;
+import org.jsp.reservationapi.dto.AdminRequest;
 import org.jsp.reservationapi.dto.ResponseStructure;
 import org.jsp.reservationapi.exception.AdminNotFoundException;
 import org.jsp.reservationapi.model.Admin;
@@ -16,26 +18,36 @@ public class AdminService {
 	@Autowired
 	private AdminDao adminDao;
 
-	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(Admin admin) {
+	/**
+	 * This method will accept {@link AdminRequest} and maps it to {@link Admin} and by calling 
+	 * mapToAdmin(AdminRequest).
+	 * @param adminRequest
+	 * @return {@link ResponseEntity}
+	 * @throws ConstraintViolationException if any constraint is violated
+	 */
+	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(AdminRequest adminRequest) {
 		ResponseStructure<Admin> structure = new ResponseStructure<>();
 		structure.setMessage("Admin saved");
-		structure.setData(adminDao.saveAdmin(admin));
+		structure.setData(adminDao.saveAdmin(mapToAdmin(adminRequest)));
 		structure.setStatusCode(HttpStatus.CREATED.value());
 		return ResponseEntity.status(HttpStatus.CREATED).body(structure);
 	}
 
-	public ResponseEntity<ResponseStructure<Admin>> update(Admin admin) {
-		Optional<Admin> recAdmin = adminDao.findById(admin.getId());
+	/**
+	 * This method will accept AdminRequest(DTO) and Admin Id and update the Admin
+	 * in the Database if identifier is valid.
+	 * @param adminRequest
+	 * @param id          
+	 * @return {@link ResponseEntity}
+	 * @throws {@code AdminNotFoundException} if Identifier is Invalid
+	 */
+	public ResponseEntity<ResponseStructure<Admin>> update(AdminRequest adminRequest, int id) {
+		Optional<Admin> recAdmin = adminDao.findById(id);
 		ResponseStructure<Admin> structure = new ResponseStructure<>();
 		if (recAdmin.isPresent()) {
-			Admin dbAdmin = recAdmin.get();
-			dbAdmin.setEmail(admin.getEmail());
-			dbAdmin.setName(admin.getName());
-			dbAdmin.setGst_number(admin.getGst_number());
-			dbAdmin.setPassword(admin.getPassword());
-			dbAdmin.setPhone(admin.getPhone());
-			dbAdmin.setTravels_name(admin.getTravels_name());
-			structure.setData(adminDao.saveAdmin(admin));
+			Admin dbAdmin = mapToAdmin(adminRequest);
+			dbAdmin.setId(id);
+			structure.setData(adminDao.saveAdmin(dbAdmin));
 			structure.setMessage("Admin Updated");
 			structure.setStatusCode(HttpStatus.ACCEPTED.value());
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(structure);
@@ -91,4 +103,15 @@ public class AdminService {
 		}
 		throw new AdminNotFoundException("Cannot delete Admin as Id is Invalid");
 	}
+
+	private Admin mapToAdmin(AdminRequest adminRequest) {
+		return Admin.builder().email(adminRequest.getEmail()).name(adminRequest.getName())
+				.phone(adminRequest.getPhone()).gst_number(adminRequest.getGst_number())
+				.travels_name(adminRequest.getTravels_name()).password(adminRequest.getPassword()).build();
+	}
 }
+
+
+
+
+

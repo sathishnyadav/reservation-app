@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Admin {
+@NoArgsConstructor
+public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -23,12 +23,12 @@ public class Admin {
 	private String name;
 	@Column(nullable = false, unique = true)
 	private long phone;
-	@Column(unique = true, nullable = false)
-	private String gst_number;
-	@Column(nullable = false)
-	private String travels_name;
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false, unique = true)
 	private String email;
+	@Column(nullable = false)
+	private String gender;
+	@Column(nullable = false)
+	private int age;
 	@Column(nullable = false)
 	private String password;
 }

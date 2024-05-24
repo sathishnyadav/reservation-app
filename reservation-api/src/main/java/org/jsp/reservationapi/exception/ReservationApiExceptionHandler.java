@@ -15,6 +15,6 @@ public class ReservationApiExceptionHandler extends ResponseEntityExceptionHandl
 		structure.setData("Admin Not Found");
 		structure.setMessage(exception.getMessage());
 		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
-		return ResponseEntity.status(HttpStatus.OK).body(structure);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(structure);
 	}
 }
