@@ -18,15 +18,11 @@ public class AdminService {
 	@Autowired
 	private AdminDao adminDao;
 
-<<<<<<< HEAD
-	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(AdminRequest admin) {
-		ResponseStructure<Admin> structure = new ResponseStructure<>();
-		structure.setMessage("Admin saved");
-		structure.setData(adminDao.saveAdmin(mapToAdmin(admin)));
-=======
 	/**
-	 * This method will accept {@link AdminRequest} and maps it to {@link Admin} and by calling 
+	 * This method will accept {@link AdminRequest} and maps it to {@link Admin} and
+	 * by calling
 	 * mapToAdmin(AdminRequest).
+	 * 
 	 * @param adminRequest
 	 * @return {@link ResponseEntity}
 	 * @throws ConstraintViolationException if any constraint is violated
@@ -35,7 +31,6 @@ public class AdminService {
 		ResponseStructure<Admin> structure = new ResponseStructure<>();
 		structure.setMessage("Admin saved");
 		structure.setData(adminDao.saveAdmin(mapToAdmin(adminRequest)));
->>>>>>> cea5f2772bad39145c65908c4b670e2235622bec
 		structure.setStatusCode(HttpStatus.CREATED.value());
 		return ResponseEntity.status(HttpStatus.CREATED).body(structure);
 	}
@@ -43,8 +38,9 @@ public class AdminService {
 	/**
 	 * This method will accept AdminRequest(DTO) and Admin Id and update the Admin
 	 * in the Database if identifier is valid.
+	 * 
 	 * @param adminRequest
-	 * @param id          
+	 * @param id
 	 * @return {@link ResponseEntity}
 	 * @throws {@code AdminNotFoundException} if Identifier is Invalid
 	 */
@@ -111,21 +107,9 @@ public class AdminService {
 		throw new AdminNotFoundException("Cannot delete Admin as Id is Invalid");
 	}
 
-<<<<<<< HEAD
-	public Admin mapToAdmin(AdminRequest request) {
-		return Admin.builder().email(request.getEmail()).name(request.getName()).gst_number(request.getGst_number())
-				.password(request.getPassword()).travels_name(request.getTravels_name()).phone(request.getPhone())
-				.build();
-=======
 	private Admin mapToAdmin(AdminRequest adminRequest) {
 		return Admin.builder().email(adminRequest.getEmail()).name(adminRequest.getName())
 				.phone(adminRequest.getPhone()).gst_number(adminRequest.getGst_number())
 				.travels_name(adminRequest.getTravels_name()).password(adminRequest.getPassword()).build();
->>>>>>> cea5f2772bad39145c65908c4b670e2235622bec
 	}
 }
-
-
-
-
-

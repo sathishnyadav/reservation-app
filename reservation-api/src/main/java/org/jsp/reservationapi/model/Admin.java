@@ -5,10 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-<<<<<<< HEAD
-=======
 import lombok.AllArgsConstructor;
->>>>>>> cea5f2772bad39145c65908c4b670e2235622bec
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,11 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @Builder
-<<<<<<< HEAD
-=======
 @NoArgsConstructor
 @AllArgsConstructor
->>>>>>> cea5f2772bad39145c65908c4b670e2235622bec
 public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
