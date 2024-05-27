@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AdminResponse {
+public class UserResponse {
 	private int id;
 	private String name;
 	private long phone;
-	private String gst_number;
-	private String travels_name;
 	private String email;
+	private String gender;
+	private int age;
 	private String password;
 }
