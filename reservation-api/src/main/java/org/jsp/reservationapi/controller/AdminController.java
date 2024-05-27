@@ -1,5 +1,6 @@
 package org.jsp.reservationapi.controller;
 
+import org.jsp.reservationapi.dto.AdminRequest;
 import org.jsp.reservationapi.dto.ResponseStructure;
 import org.jsp.reservationapi.model.Admin;
 import org.jsp.reservationapi.service.AdminService;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/admins")
 public class AdminController {
@@ -22,7 +25,7 @@ public class AdminController {
 	private AdminService adminService;
 
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(@RequestBody Admin admin) {
+	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(@Valid @RequestBody AdminRequest admin) {
 		return adminService.saveAdmin(admin);
 	}
 

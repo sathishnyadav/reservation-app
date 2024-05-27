@@ -3,6 +3,7 @@ package org.jsp.reservationapi.service;
 import java.util.Optional;
 
 import org.jsp.reservationapi.dao.AdminDao;
+import org.jsp.reservationapi.dto.AdminRequest;
 import org.jsp.reservationapi.dto.ResponseStructure;
 import org.jsp.reservationapi.exception.AdminNotFoundException;
 import org.jsp.reservationapi.model.Admin;
@@ -16,10 +17,10 @@ public class AdminService {
 	@Autowired
 	private AdminDao adminDao;
 
-	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(Admin admin) {
+	public ResponseEntity<ResponseStructure<Admin>> saveAdmin(AdminRequest admin) {
 		ResponseStructure<Admin> structure = new ResponseStructure<>();
 		structure.setMessage("Admin saved");
-		structure.setData(adminDao.saveAdmin(admin));
+		structure.setData(adminDao.saveAdmin(mapToAdmin(admin)));
 		structure.setStatusCode(HttpStatus.CREATED.value());
 		return ResponseEntity.status(HttpStatus.CREATED).body(structure);
 	}
@@ -90,5 +91,11 @@ public class AdminService {
 			return ResponseEntity.status(HttpStatus.OK).body(structure);
 		}
 		throw new AdminNotFoundException("Cannot delete Admin as Id is Invalid");
+	}
+
+	public Admin mapToAdmin(AdminRequest request) {
+		return Admin.builder().email(request.getEmail()).name(request.getName()).gst_number(request.getGst_number())
+				.password(request.getPassword()).travels_name(request.getTravels_name()).phone(request.getPhone())
+				.build();
 	}
 }
