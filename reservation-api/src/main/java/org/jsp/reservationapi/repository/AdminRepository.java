@@ -1,5 +1,6 @@
 package org.jsp.reservationapi.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jsp.reservationapi.model.Admin;
@@ -9,4 +10,6 @@ public interface AdminRepository extends JpaRepository<Admin, Integer> {
 	Optional<Admin> findByPhoneAndPassword(long phone, String password);
 
 	Optional<Admin> findByEmailAndPassword(String email, String password);
+
+	List<Admin> findByTravels_name(String travels_name);
 }
