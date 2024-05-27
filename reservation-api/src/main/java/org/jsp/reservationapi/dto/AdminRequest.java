@@ -1,5 +1,6 @@
 package org.jsp.reservationapi.dto;
 
+<<<<<<< HEAD
 import org.springframework.context.annotation.Primary;
 
 import jakarta.validation.constraints.Email;
@@ -21,4 +22,16 @@ public class AdminRequest {
 	@NotBlank(message = "Gst Number is mandatory")
 	private String gst_number;
 
+=======
+import lombok.Data;
+
+@Data
+public class AdminRequest {
+	private long phone;
+	private String email;
+	private String gst_number;
+	private String name;
+	private String travels_name;
+	private String password;
+>>>>>>> cea5f2772bad39145c65908c4b670e2235622bec
 }
