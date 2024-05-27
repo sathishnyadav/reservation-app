@@ -30,8 +30,13 @@ public class UserService {
 		Optional<User> recUser = userDao.findById(id);
 		ResponseStructure<UserResponse> structure = new ResponseStructure<>();
 		if (recUser.isPresent()) {
-			User dbUser = mapToUser(userRequest);
-			dbUser.setId(id);
+			User dbUser = recUser.get();
+			dbUser.setAge(userRequest.getAge());
+			dbUser.setEmail(userRequest.getEmail());
+			dbUser.setGender(userRequest.getGender());
+			dbUser.setName(userRequest.getName());
+			dbUser.setPhone(userRequest.getPhone());
+			dbUser.setPassword(userRequest.getPassword());
 			structure.setData(mapToUserResponse(userDao.saveUser(dbUser)));
 			structure.setMessage("User Updated");
 			structure.setStatusCode(HttpStatus.ACCEPTED.value());

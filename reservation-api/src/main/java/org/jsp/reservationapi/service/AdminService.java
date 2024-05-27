@@ -49,8 +49,13 @@ public class AdminService {
 		Optional<Admin> recAdmin = adminDao.findById(id);
 		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
 		if (recAdmin.isPresent()) {
-			Admin dbAdmin = mapToAdmin(adminRequest);
-			dbAdmin.setId(id);
+			Admin dbAdmin = recAdmin.get();
+			dbAdmin.setEmail(adminRequest.getEmail());
+			dbAdmin.setGst_number(adminRequest.getGst_number());
+			dbAdmin.setName(adminRequest.getName());
+			dbAdmin.setPhone(adminRequest.getPhone());
+			dbAdmin.setPassword(adminRequest.getPassword());
+			dbAdmin.setTravels_name(adminRequest.getTravels_name());
 			structure.setData(mapToAdminResponse(adminDao.saveAdmin(dbAdmin)));
 			structure.setMessage("Admin Updated");
 			structure.setStatusCode(HttpStatus.ACCEPTED.value());
