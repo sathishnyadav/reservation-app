@@ -25,7 +25,7 @@ public class AdminController {
 	private AdminService adminService;
 
 	@PostMapping
-	public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@RequestBody AdminRequest adminRequest) {
+	public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@Valid @RequestBody AdminRequest adminRequest) {
 		return adminService.saveAdmin(adminRequest);
 	}
 
