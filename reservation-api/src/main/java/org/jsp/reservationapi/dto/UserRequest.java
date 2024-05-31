@@ -14,7 +14,6 @@ public class UserRequest {
 	private String email;
 	@NotBlank(message = "Gender is mandatory")
 	private String gender;
-	@NotBlank(message = "Age Field is mandatory")
 	private int age;
 	@NotBlank(message = "Password is mandatory")
 	@Size(min = 8, max = 15, message = "Password length must be between 8 to 15")

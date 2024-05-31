@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -25,8 +26,9 @@ public class AdminController {
 	private AdminService adminService;
 
 	@PostMapping
-	public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@Valid @RequestBody AdminRequest adminRequest) {
-		return adminService.saveAdmin(adminRequest);
+	public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@Valid @RequestBody AdminRequest adminRequest,
+			HttpServletRequest request) {
+		return adminService.saveAdmin(adminRequest, request);
 	}
 
 	@PutMapping("/{id}")
@@ -55,5 +57,10 @@ public class AdminController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<ResponseStructure<String>> delete(@PathVariable int id) {
 		return adminService.delete(id);
+	}
+
+	@GetMapping("/activate")
+	public String activate(@RequestParam String token) {
+		return adminService.activate(token);
 	}
 }
