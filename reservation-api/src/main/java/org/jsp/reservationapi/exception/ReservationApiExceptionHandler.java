@@ -26,6 +26,24 @@ public class ReservationApiExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(structure);
 	}
 
+	@ExceptionHandler(BusNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> handle(BusNotFoundException exception) {
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData("Bus Not Found");
+		structure.setMessage(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(structure);
+	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> handle(UserNotFoundException exception) {
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData("User Not Found");
+		structure.setMessage(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(structure);
+	}
+
 	@ExceptionHandler({ ConstraintViolationException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public String handleConstraintViolationException(ConstraintViolationException ex) {
@@ -43,5 +61,15 @@ public class ReservationApiExceptionHandler {
 			errors.put(fieldName, errorMessage);
 		}
 		return errors;
+	}
+
+	@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(IllegalStateException.class)
+	public ResponseStructure<String> handle(IllegalStateException exception) {
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData("Cannot SingIn");
+		structure.setMessage(exception.getMessage());
+		structure.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+		return structure;
 	}
 }

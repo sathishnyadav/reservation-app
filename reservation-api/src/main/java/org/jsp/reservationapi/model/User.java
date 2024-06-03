@@ -31,4 +31,7 @@ public class User {
 	private int age;
 	@Column(nullable = false)
 	private String password;
+	private String token;
+	@Column(nullable = false)
+	private String status;
 }

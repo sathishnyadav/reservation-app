@@ -41,7 +41,7 @@ public class AdminService {
 			HttpServletRequest request) {
 		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
 		Admin admin = mapToAdmin(adminRequest);
-		admin.setStatus(AccountStatus.ACTIVE.toString());
+		admin.setStatus(AccountStatus.IN_ACTIVE.toString());
 		admin = adminDao.saveAdmin(admin);
 		String activation_link = linkGeneratorService.getActivationLink(admin, request);
 		emailConfiguration.setSubject("Activate Your Account");
@@ -98,7 +98,11 @@ public class AdminService {
 		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
 		Optional<Admin> dbAdmin = adminDao.verify(phone, password);
 		if (dbAdmin.isPresent()) {
-			structure.setData(mapToAdminResponse(dbAdmin.get()));
+			Admin admin = dbAdmin.get();
+			if (admin.getStatus().equals(AccountStatus.IN_ACTIVE.toString()))
+				throw new IllegalStateException("Please Activate Your Account before You Sign In");
+
+			structure.setData(mapToAdminResponse(admin));
 			structure.setMessage("Verification Succesfull");
 			structure.setStatusCode(HttpStatus.OK.value());
 			return ResponseEntity.status(HttpStatus.OK).body(structure);
@@ -110,7 +114,11 @@ public class AdminService {
 		ResponseStructure<AdminResponse> structure = new ResponseStructure<>();
 		Optional<Admin> dbAdmin = adminDao.verify(email, password);
 		if (dbAdmin.isPresent()) {
-			structure.setData(mapToAdminResponse(dbAdmin.get()));
+			Admin admin = dbAdmin.get();
+			if (admin.getStatus().equals(AccountStatus.IN_ACTIVE.toString()))
+				throw new IllegalStateException("Please Activate Your Account before You Sign In");
+
+			structure.setData(mapToAdminResponse(admin));
 			structure.setMessage("Verification Succesfull");
 			structure.setStatusCode(HttpStatus.OK.value());
 			return ResponseEntity.status(HttpStatus.OK).body(structure);
