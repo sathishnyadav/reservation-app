@@ -1,0 +1,28 @@
+.AddBus{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url(https://media.giphy.com/media/H5BfYd0N7kRBJyFZD2/giphy.gif);
+}
+.AddBus form{
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    font-size: 25px;
+    font-family: cursive;
+    display: grid;
+    grid-template-columns: 300px 300px;
+}
+.AddBus form input{
+    margin: 5px 0px;
+    background-color: white;
+}
+.AddBus form input::placeholder{
+
+    color: grey;
+}

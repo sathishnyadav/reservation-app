@@ -1,0 +1,15 @@
+.AdminNavbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(250, 247, 174);
+    padding: 0px 50px;
+    height: 70px;
+}
+.AdminNavbar .logo h1{
+    color: crimson;
+}
+.AdminNavbar .logo sup{
+color: brown;
+
+}
