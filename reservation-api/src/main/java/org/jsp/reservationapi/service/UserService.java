@@ -3,25 +3,44 @@ package org.jsp.reservationapi.service;
 import java.util.Optional;
 
 import org.jsp.reservationapi.dao.UserDao;
+import org.jsp.reservationapi.dto.EmailConfiguration;
 import org.jsp.reservationapi.dto.ResponseStructure;
 import org.jsp.reservationapi.dto.UserRequest;
 import org.jsp.reservationapi.dto.UserResponse;
 import org.jsp.reservationapi.exception.UserNotFoundException;
 import org.jsp.reservationapi.model.User;
+import org.jsp.reservationapi.util.AccountStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Service
 public class UserService {
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private LinkGeneratorService linkGeneratorService;
+	@Autowired
+	private ReservationApiMailService mailService;
+	@Autowired
+	private EmailConfiguration emailConfiguration;
 
-	public ResponseEntity<ResponseStructure<UserResponse>> saveUser(UserRequest userRequest) {
+	public ResponseEntity<ResponseStructure<UserResponse>> saveUser(UserRequest userRequest,
+			HttpServletRequest request) {
 		ResponseStructure<UserResponse> structure = new ResponseStructure<>();
-		structure.setMessage("User saved");
-		structure.setData(mapToUserResponse(userDao.saveUser(mapToUser(userRequest))));
+		User user = mapToUser(userRequest);
+		user.setStatus(AccountStatus.IN_ACTIVE.toString());
+		user = userDao.saveUser(user);
+		String activation_link = linkGeneratorService.getActivationLink(user, request);
+		emailConfiguration.setSubject("Activate Your Account");
+		emailConfiguration
+				.setText("Dear User Please Activate Your Account by clicking on the following link:" + activation_link);
+		emailConfiguration.setToAddress(user.getEmail());
+		structure.setMessage(mailService.sendMail(emailConfiguration));
+		structure.setData(mapToUserResponse(user));
 		structure.setStatusCode(HttpStatus.CREATED.value());
 		return ResponseEntity.status(HttpStatus.CREATED).body(structure);
 	}
@@ -61,6 +80,10 @@ public class UserService {
 		ResponseStructure<UserResponse> structure = new ResponseStructure<>();
 		Optional<User> dbUser = userDao.verify(phone, password);
 		if (dbUser.isPresent()) {
+			User user = dbUser.get();
+			if (user.getStatus().equals(AccountStatus.IN_ACTIVE.toString()))
+				throw new IllegalStateException("Please Activate Your Account before You SignIn");
+
 			structure.setData(mapToUserResponse(dbUser.get()));
 			structure.setMessage("Verification Succesfull");
 			structure.setStatusCode(HttpStatus.OK.value());
@@ -73,7 +96,11 @@ public class UserService {
 		ResponseStructure<UserResponse> structure = new ResponseStructure<>();
 		Optional<User> dbUser = userDao.verify(email, password);
 		if (dbUser.isPresent()) {
-			structure.setData(mapToUserResponse(dbUser.get()));
+			User user = dbUser.get();
+			if (user.getStatus().equals(AccountStatus.IN_ACTIVE.toString()))
+				throw new IllegalStateException("Please Activate Your Account before You SignIn");
+
+			structure.setData(mapToUserResponse(user));
 			structure.setMessage("Verification Succesfull");
 			structure.setStatusCode(HttpStatus.OK.value());
 			return ResponseEntity.status(HttpStatus.OK).body(structure);
@@ -104,4 +131,16 @@ public class UserService {
 				.gender(user.getGender()).phone(user.getPhone()).age(user.getAge()).password(user.getPassword())
 				.build();
 	}
+
+	public String activate(String token) {
+		Optional<User> recUser = userDao.findByToken(token);
+		if (recUser.isEmpty())
+			throw new UserNotFoundException("Invalid Token");
+		User dbUser = recUser.get();
+		dbUser.setStatus("ACTIVE");
+		dbUser.setToken(null);
+		userDao.saveUser(dbUser);
+		return "Your Account has been activated";
+	}
+
 }
