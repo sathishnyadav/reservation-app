@@ -11,6 +11,6 @@ public interface BusRepository extends JpaRepository<Bus, Integer> {
 	@Query("select b from Bus b where b.admin.id=?1")
 	List<Bus> findByAdminId(int id);
 
-	@Query("select b from Bus b where b.from=?1 and b.to=?2 and b.dateofDeparture=?3")
+	@Query("select b from Bus b where b.from=?1 and b.to=?2 and b.dateOfDeparture=?3")
 	List<Bus> findBuses(String from, String to, LocalDate dateOfDeparture);
 }
