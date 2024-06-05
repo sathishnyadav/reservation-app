@@ -1,25 +1,33 @@
 import React, { useState } from 'react'
 import '../Styles/AdminLogin.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 export default function AdminLogin() {
-  let [username,setusername] = useState("")
+  let [email,setemail] = useState("")
   let [password,setpassword] = useState("")
 
-  function verify(){
-    if(username == "abcd" && password == 1234){
-      alert("Login Succefull")
-    }
-    else{
-      alert("login failed")
-    }
+  let nav = useNavigate()
+  function verify(e){
+    e.preventDefault()
+    axios.post(`http://localhost:8080/api/admins/verify-by-email?email=${email}&password=${password}`)
+    .then((res)=>{
+        alert("Login Successfull")
+        console.log(res.data.data);
+        nav('/adminhomepage')
+        localStorage.setItem("Admin",JSON.stringify(res.data.data))
+    })
+    .catch((err)=>{
+        alert("Login Fail")
+    })
+
   }
   return (
     <div className='AdminLogin'>
         <form onSubmit={verify} action="">
             <label htmlFor="">  
-                UserName
+                email
             </label>
-            <input type="text" value={username} onChange={(e)=>{setusername(e.target.value)}} placeholder='Enter the username' required />
+            <input type="text" value={email} onChange={(e)=>{setemail(e.target.value)}} placeholder='Enter the email' required />
             <label htmlFor="">
                 Password
             </label>

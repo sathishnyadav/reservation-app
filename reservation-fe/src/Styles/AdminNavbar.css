@@ -1,0 +1,6 @@
+.AdminNavbar{
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 40px;
+    align-items: center;
+}
