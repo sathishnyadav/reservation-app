@@ -1,7 +1,6 @@
 package org.jsp.reservationapi.service;
 
 import java.util.Optional;
-import java.util.Random;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.jsp.reservationapi.dao.AdminDao;
@@ -161,5 +160,28 @@ public class AdminService {
 		dbAdmin.setToken(null);
 		adminDao.saveAdmin(dbAdmin);
 		return "Your Account has been activated";
+	}
+
+	public String forgotPassword(String email, HttpServletRequest request) {
+		Optional<Admin> recAdmin = adminDao.findByEmail(email);
+		if (recAdmin.isEmpty())
+			throw new AdminNotFoundException("Invalid Email Id");
+		Admin admin = recAdmin.get();
+		String resetPasswordLink = linkGeneratorService.getResetPasswordLink(admin, request);
+		emailConfiguration.setToAddress(email);
+		emailConfiguration.setText("Please click on the following link to reset your password " + resetPasswordLink);
+		emailConfiguration.setSubject("RESET YOUR PASSWORD");
+		mailService.sendMail(emailConfiguration);
+		return "reset password link has been sent to entered mail Id";
+	}
+
+	public AdminResponse verifyLink(String token) {
+		Optional<Admin> recAdmin = adminDao.findByToken(token);
+		if (recAdmin.isEmpty())
+			throw new AdminNotFoundException("Link has been expired or it is Invalid");
+		Admin dbAdmin = recAdmin.get();
+		dbAdmin.setToken(null);
+		adminDao.saveAdmin(dbAdmin);
+		return mapToAdminResponse(dbAdmin);
 	}
 }

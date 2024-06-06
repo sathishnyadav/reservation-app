@@ -29,10 +29,14 @@ public class BusService {
 		ResponseStructure<Bus> structure = new ResponseStructure<>();
 		if (recAdmin.isPresent()) {
 			Bus bus = mapToBus(busRequest);
+			bus.setAvailableSeats(bus.getAvailableSeats());
 			bus.setAdmin(recAdmin.get());
 			recAdmin.get().getBuses().add(bus);
 			adminDao.saveAdmin(recAdmin.get());
 			busDao.saveBus(bus);
+			structure.setData(bus);
+			structure.setMessage("Bus Added");
+			structure.setStatusCode(HttpStatus.CREATED.value());
 			return ResponseEntity.status(HttpStatus.CREATED).body(structure);
 		}
 		throw new AdminNotFoundException("Cannot Add Bus as Admin Id is Invalid");
@@ -50,6 +54,8 @@ public class BusService {
 		dbBus.setName(busRequest.getTo());
 		dbBus.setNumberOfSeats(busRequest.getNumberOfSeats());
 		dbBus.setName(busRequest.getName());
+		dbBus.setCostPerSeat(busRequest.getCostPerSeat()); 
+		dbBus.setAvailableSeats(busRequest.getNumberOfSeats());
 		dbBus = busDao.saveBus(dbBus);
 		structure.setData(dbBus);
 		structure.setMessage("Bus updated");
@@ -101,6 +107,6 @@ public class BusService {
 	public Bus mapToBus(BusRequest busRequest) {
 		return Bus.builder().name(busRequest.getName()).busNumber(busRequest.getBusNumber())
 				.dateOfDeparture(busRequest.getDateOfDeparture()).from(busRequest.getFrom()).to(busRequest.getTo())
-				.numberOfSeats(busRequest.getNumberOfSeats()).build();
+				.numberOfSeats(busRequest.getNumberOfSeats()).costPerSeat(busRequest.getCostPerSeat()).build();
 	}
 }
