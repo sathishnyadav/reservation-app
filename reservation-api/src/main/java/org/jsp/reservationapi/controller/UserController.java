@@ -60,4 +60,9 @@ public class UserController {
 	public ResponseEntity<ResponseStructure<String>> delete(@PathVariable int id) {
 		return userService.delete(id);
 	}
+
+	@GetMapping("/activate")
+	public String activate(@RequestParam String token) {
+		return userService.activate(token);
+	}
 }

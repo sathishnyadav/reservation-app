@@ -3,6 +3,7 @@ package org.jsp.reservationapi.dto;
 import java.time.LocalDate;
 
 import lombok.Data;
+
 @Data
 public class BusRequest {
 	private int id;
@@ -12,4 +13,5 @@ public class BusRequest {
 	private String from;
 	private String to;
 	private int numberOfSeats;
+	private double costPerSeat;
 }

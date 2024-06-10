@@ -72,4 +72,14 @@ public class ReservationApiExceptionHandler {
 		structure.setStatusCode(HttpStatus.UNAUTHORIZED.value());
 		return structure;
 	}
+
+	@ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseStructure<String> handle(IllegalArgumentException exception) {
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setData("Cannot Complete the Action");
+		structure.setMessage(exception.getMessage());
+		structure.setStatusCode(HttpStatus.NOT_ACCEPTABLE.value());
+		return structure;
+	}
 }
