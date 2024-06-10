@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../Styles/AdminSignup.css";
+import axios from "axios";
 export default function AdminSignUp() {
   let [name, setname] = useState("");
   let [email, setemail] = useState("");
@@ -7,9 +8,23 @@ export default function AdminSignUp() {
   let [phone, setphone] = useState("");
   let [gst_number, setgstno] = useState("");
   let [travels_name, settravel] = useState("");
+
+  let data = {name,email,password,phone,gst_number,travels_name}
+  function addAdmin(e){
+    e.preventDefault();
+    axios.post(`http://localhost:8080/api/admins`,data)
+    .then((res)=>{
+        console.log(res);
+        alert("Bus Details Have been Added Successfully")
+    })
+    .catch((err)=>{ 
+        console.log(err);
+        alert("Invalid Data Format")
+    })
+}
   return (
     <div className="AdminSignUp">
-      <form action="">
+      <form onSubmit={addAdmin} action="">
         <label htmlFor="">Name</label>
         <input
           type="text"
@@ -20,7 +35,7 @@ export default function AdminSignUp() {
         />
         <label htmlFor="">Email</label>
         <input
-          type="text"
+          type="email"
           required
           placeholder="Enter the Email"
           value={email}
@@ -28,7 +43,8 @@ export default function AdminSignUp() {
         />
         <label htmlFor="">Phone</label>
         <input
-          type="text"
+          type="tel"
+          pattern="[0-9]{10}"
           required
           placeholder="Enter the Phone"
           value={phone}

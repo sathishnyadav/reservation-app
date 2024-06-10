@@ -1,11 +1,13 @@
 package org.jsp.reservationapi.controller;
 
 import org.jsp.reservationapi.dto.AdminRequest;
+
 import org.jsp.reservationapi.dto.AdminResponse;
 import org.jsp.reservationapi.dto.ResponseStructure;
 import org.jsp.reservationapi.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/admins")
 public class AdminController {
@@ -28,6 +31,7 @@ public class AdminController {
 	@PostMapping
 	public ResponseEntity<ResponseStructure<AdminResponse>> saveAdmin(@Valid @RequestBody AdminRequest adminRequest,
 			HttpServletRequest request) {
+		System.out.println(adminRequest);
 		return adminService.saveAdmin(adminRequest, request);
 	}
 

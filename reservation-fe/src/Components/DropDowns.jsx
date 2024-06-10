@@ -9,9 +9,9 @@ function Dropdown1() {
 
       <Dropdown.Menu>
         <Dropdown.Item href="/adminhomepage/addbus">AddBus</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Buses List</Dropdown.Item>
+        <Dropdown.Item href="/adminhomepage/viewbus">Buses List</Dropdown.Item>
         <Dropdown.Item href="#/action-2">Edit Profile</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Logout</Dropdown.Item>
+        <Dropdown.Item href="/">Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );

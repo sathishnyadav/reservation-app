@@ -13,14 +13,16 @@ export default function AdminLogin() {
     .then((res)=>{
         alert("Login Successfull")
         console.log(res.data.data);
-        nav('/adminhomepage')
         localStorage.setItem("Admin",JSON.stringify(res.data.data))
+        nav('/adminhomepage')
+
     })
     .catch((err)=>{
         alert("Login Fail")
     })
 
   }
+
   return (
     <div className='AdminLogin'>
         <form onSubmit={verify} action="">
@@ -36,7 +38,6 @@ export default function AdminLogin() {
 
         </form>
         <p>Are you the new user ? <Link to="/adminsignup">Register here..</Link></p>
-
     </div>
   )
 }

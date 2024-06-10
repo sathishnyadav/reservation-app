@@ -21,6 +21,7 @@ public class LinkGeneratorService {
 	private UserDao userDao;
 
 	public String getActivationLink(Admin admin, HttpServletRequest request) {
+		System.out.println(admin);
 		admin.setToken(RandomString.make(45));
 		adminDao.saveAdmin(admin);
 		String siteUrl = request.getRequestURL().toString();
